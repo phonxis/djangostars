@@ -1,0 +1,9 @@
+.idea/
+*.pyc
+*.mo
+db.sqlite3
+__pycache__/
+env/
+media/
+local_settings.py
+

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Author form
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <form action="." method="POST" class="form-horizontal">
+        {% for field in form %}
+        <div class="form-group {% if field.errors %}has-error{% endif %}">
+            <div class="col-3 col-sm-12">
+                {{ field.label }}
+            </div>
+            <div class="col-9 col-sm-12">
+                {{ field }}
+                {% for err in field.errors %}
+                    <span class="form-input-hint">{{ err }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+    </form>
+    {{ block.super }}
+</div>
+{% endblock content %}

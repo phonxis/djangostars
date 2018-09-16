@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Request list
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Path</th>
+              <th>Method</th>
+              <th>Datetime</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for request in request_list %}
+                <tr class="{% cycle 'active' '' %}">
+                  <td>{{ request.user }}</td>
+                  <td>{{ request.path_info }}</td>
+                  <td>{{ request.request_method }}</td>
+                  <td>{{ request.created_dt }}</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+{% endblock content %}

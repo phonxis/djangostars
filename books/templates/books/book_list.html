@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Book list
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div>
+      <a href="{% url 'common:request-list' %}" class="btn btn-primary btn-action btn-sm">
+        <i class="icon icon-upload"></i>
+      </a> Requests
+      <a href="{% url 'books:create' %}" class="btn btn-primary btn-action btn-sm">
+        <i class="icon icon-plus"></i>
+      </a> New book
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>ISBN</th>
+          <th>Price</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in book_list %}
+            <tr class="{% cycle 'active' '' %}">
+              <td>{{ book.title }}</td>
+              <td>
+                {% for author in book.authors.all %}
+                    {{ author.last_name }} {{ author.first_name.0}}.{% if not forloop.last%}, {% endif %}
+                {% endfor %}
+              </td>
+              <td>{{ book.isbn }}</td>
+              <td>{{ book.price }}</td>
+              {% if request.user.is_authenticated %}
+              <td>
+                  <a href="{% url 'books:update' book.id %}" class="btn btn-action btn-sm" title="Update book info"><i class="icon icon-edit"></i></a>
+                  <a href="{% url 'admin:books_book_change' book.id %}" class="btn btn-primary btn-action btn-sm" title="Update book info(Admin site)"><i class="icon icon-edit"></i></a>
+              </td>
+              {% else %}
+              <td title="Log in to system">
+                  <a href="{% url 'books:update' book.id %}" class="btn btn-primary btn-action btn-sm disabled"><i class="icon icon-edit"></i></a>
+                  <a href="{% url 'admin:books_book_change' book.id %}" class="btn btn-primary btn-action btn-sm disabled" title="Update book info(Admin site)"><i class="icon icon-edit"></i></a>
+              </td>
+              {% endif %}
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if is_paginated %}
+        <ul class="pagination text-center">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a href="{% url 'books:list' %}?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a href="#">Previous</a>
+          </li>
+          {% endif %}
+          <li class="page-item">
+            <a href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+          </li>
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a href="{% url 'books:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a href="#">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+    {% endif %}
+    {{ block.super }}
+</div>
+{% endblock content %}
